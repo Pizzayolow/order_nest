@@ -64,14 +64,14 @@
 						<td>
 							<a hx-get="{% url 'webapp:product-edit' pk=product.product.id %}"
 								hx-target="#dialog">
-								<img width="25" height="20" src="{% static '/img/edit.svg' %}">
+								<img width="25" height="20" src="{% static 'img/edit.svg' %}">
 							</a>
 						</td>
 	
 						<td>
 							<a hx-get="{% url 'webapp:product-delete' pk=product.product.id %}"
 								hx-target="#dialog">
-								<img width="25" height="20" src="{% static '/img/delete.svg' %}">
+								<img width="25" height="20" src="{% static 'img/delete.svg' %}">
 							</a>
 						</td>
 

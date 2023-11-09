@@ -2,6 +2,7 @@ import base64
 import datetime
 import json
 import os.path
+import sys
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -20,6 +21,7 @@ from django.views.generic import (
 )
 from .models import Customer, Order, OrderHasProduct, Product, OrderAttachment
 from .forms import AddProductForm, NewOrderForm, NewCustomerForm, AddProductsToOrder
+import re
 
 
 class LandingPage(TemplateView):
@@ -76,12 +78,10 @@ class CreateOrder(CreateView):
     def post(self, request, *args, **kwargs):
         order_form = NewOrderForm(request.POST)
         customer_form = NewCustomerForm(request.POST)
-       
-        
+
         if order_form.is_valid() and customer_form.is_valid():
             # On récupère l'id du champ caché
             customer_id = request.POST.get("id", None)
-            print(customer_id)
             # On récupère le client (existant ou nouveau)
             customer, is_existing_customer = self.get_or_create_customer(
                 customer_id, customer_form
@@ -248,7 +248,6 @@ class Dashboard(ListView):
         context["count_invoice"] = count_invoice
         context["count_canceled"] = count_canceled
         context["count_urgent"] = count_urgent
-
 
         return context
 
@@ -462,6 +461,19 @@ def save_pictures(request):
         order_id = request.POST["orderId"]
 
         file.name = current_time + "_" + file.name
+        split = file.name.split('.')
+
+        if len(split) > 1:
+            extension = split[-1]
+            extension_rgx = re.sub('[^A-Za-z0-9]+', '', extension)
+            name = split[0:-1]
+            name_str = "".join(name)
+            name_rgx = re.sub('[^A-Za-z0-9]+', '', name_str)
+            concat = name_rgx + '.' + extension_rgx
+        else:
+            concat = re.sub('[^A-Za-z0-9]+', '', file.name)
+
+        file.name = concat
 
         # On crée l'objet OrderAttachment
         attachment = OrderAttachment()

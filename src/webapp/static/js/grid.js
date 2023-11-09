@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         server: {
             url: '/get_orders/',
-            then: data => data.results.map(order => [order.IDorder, order.customer, order.label, order.status, order.created, order.url])
+            then: data => data.results.map(order => [order.IDorder, order.customer, order.label, order.status, order.created, order.url]),
         }
 
     });
