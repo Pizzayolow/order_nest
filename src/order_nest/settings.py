@@ -13,10 +13,13 @@ import os
 from pathlib import Path
 import environ
 import dj_database_url
+from django.core.wsgi import get_wsgi_application
+from whitenoise import WhiteNoise
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
 env = environ.Env()
 environ.Env.read_env()
@@ -139,14 +142,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 TAILWIND_APP_NAME = 'theme'
 
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -161,10 +157,13 @@ INTERNAL_IPS = [
 if os.name == 'nt':  # Pour Windows
     NPM_BIN_PATH = "npm.cmd"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = '/app/media'
 
 MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'webapp:home'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+application = get_wsgi_application()
+application = WhiteNoise(application, root='/app/media')
+application.add_files('/app/media')

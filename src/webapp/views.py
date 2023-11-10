@@ -3,6 +3,7 @@ import datetime
 import json
 import os.path
 import sys
+import traceback
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -117,26 +118,33 @@ class EditOrder(UpdateView):
     success_url = reverse_lazy("webapp:dashboard")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order = self.get_object()
-        context["order_form"] = NewOrderForm(instance=order)
-        customer_instance = order.customer
-        context["customer_form"] = NewCustomerForm(instance=customer_instance)
-        context["product_order"] = OrderHasProduct.objects.filter(order=order.id)
-        context["attachments"] = OrderAttachment.objects.filter(
-            order=order.id, type="canvas"
-        )[:50]
-        context["attachments_pictures"] = [
-            {
-                "filename": os.path.basename(attachment.file.name),
-                "url": attachment.file.url,
-                "pk": attachment.pk,
-            }
-            for attachment in OrderAttachment.objects.filter(
-                order=order.id, type="picture"
-            ).order_by("pk")[:50]
-        ]
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            order = self.get_object()
+            context["order_form"] = NewOrderForm(instance=order)
+            customer_instance = order.customer
+            context["customer_form"] = NewCustomerForm(instance=customer_instance)
+            context["product_order"] = OrderHasProduct.objects.filter(order=order.id)
+            context["attachments"] = OrderAttachment.objects.filter(
+                order=order.id, type="canvas"
+            )[:50]
+            context["attachments_pictures"] = [
+                {
+                    "filename": os.path.basename(attachment.file.name),
+                    "url": attachment.file.url,
+                    "pk": attachment.pk,
+                }
+                for attachment in OrderAttachment.objects.filter(
+                    order=order.id, type="picture"
+                ).order_by("pk")[:50]
+            ]
+            return context
+        except Exception as e:
+            print("EXCEPT CONTEXT")
+            print(traceback.format_exc())
+
+        return None
+
 
     # Check la validité de form (order)
     def form_valid(self, form):
@@ -152,6 +160,7 @@ class EditOrder(UpdateView):
             return self.form_invalid(form)
 
     def form_invalid(self, form):
+        print("FORM INVALID")
         customer_form = NewCustomerForm(
             self.request.POST, instance=self.object.customer
         )

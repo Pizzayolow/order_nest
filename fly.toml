@@ -9,6 +9,10 @@ console_command = "/code/manage.py shell"
 
 [build]
 
+[[mounts]]
+source = "media_volume"
+destination = "/app/media"
+
 [deploy]
   release_command = "python manage.py migrate"
 

@@ -181,7 +181,7 @@
 						{{ picture.filename|truncatechars:30 }}
 					</a>
 					<button class="delete_picture" data-pk="{{ picture.pk }}" style="margin-left: 10px;">
-						<img width="10" height="10" src="{% static '/img/delete.svg' %}">
+						<img width="10" height="10" src="{% static 'img/delete.svg' %}">
 					</button>
 
 				</li>
@@ -251,7 +251,8 @@
 								<img width="35" height="40" src="{% static 'img/delete.svg' %}">
 							</button>
 						</div>
-						<img src="{{ attachment.file_url }}" alt="{{ attachment.file_name }}">
+						<img src="{% static 'img/101729toto.png' %}">
+
 					</li>
 				</div>
 				{% endfor %}
@@ -303,11 +304,6 @@
 	</div>
 </div>
 
-
-
-
-
-
 <!-- Le placeholder pour la modal -->
 <div id="modal" class="fixed inset-0 flex items-center justify-center z-50 hidden" aria-labelledby="modal-title"
 	role="dialog" aria-modal="true">
@@ -319,9 +315,5 @@
 		<!-- Le contenu de la modal sera injecté ici -->
 	</div>
 </div>
-
-
-
-
 
 {% endblock %}
