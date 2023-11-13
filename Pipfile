@@ -12,6 +12,7 @@ django-phonenumber-field = "*"
 phonenumbers = "*"
 django-browser-reload = "*"
 whitenoise = "*"
+dj-database-url = "*"
 
 [dev-packages]
 mypy = "*"

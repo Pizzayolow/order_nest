@@ -2,6 +2,8 @@ import base64
 import datetime
 import json
 import os.path
+import sys
+import traceback
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -20,6 +22,7 @@ from django.views.generic import (
 )
 from .models import Customer, Order, OrderHasProduct, Product, OrderAttachment
 from .forms import AddProductForm, NewOrderForm, NewCustomerForm, AddProductsToOrder
+import re
 
 
 class LandingPage(TemplateView):
@@ -76,12 +79,10 @@ class CreateOrder(CreateView):
     def post(self, request, *args, **kwargs):
         order_form = NewOrderForm(request.POST)
         customer_form = NewCustomerForm(request.POST)
-       
-        
+
         if order_form.is_valid() and customer_form.is_valid():
             # On récupère l'id du champ caché
             customer_id = request.POST.get("id", None)
-            print(customer_id)
             # On récupère le client (existant ou nouveau)
             customer, is_existing_customer = self.get_or_create_customer(
                 customer_id, customer_form
@@ -117,26 +118,33 @@ class EditOrder(UpdateView):
     success_url = reverse_lazy("webapp:dashboard")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order = self.get_object()
-        context["order_form"] = NewOrderForm(instance=order)
-        customer_instance = order.customer
-        context["customer_form"] = NewCustomerForm(instance=customer_instance)
-        context["product_order"] = OrderHasProduct.objects.filter(order=order.id)
-        context["attachments"] = OrderAttachment.objects.filter(
-            order=order.id, type="canvas"
-        )[:50]
-        context["attachments_pictures"] = [
-            {
-                "filename": os.path.basename(attachment.file.name),
-                "url": attachment.file.url,
-                "pk": attachment.pk,
-            }
-            for attachment in OrderAttachment.objects.filter(
-                order=order.id, type="picture"
-            ).order_by("pk")[:50]
-        ]
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            order = self.get_object()
+            context["order_form"] = NewOrderForm(instance=order)
+            customer_instance = order.customer
+            context["customer_form"] = NewCustomerForm(instance=customer_instance)
+            context["product_order"] = OrderHasProduct.objects.filter(order=order.id)
+            context["attachments"] = OrderAttachment.objects.filter(
+                order=order.id, type="canvas"
+            )[:50]
+            context["attachments_pictures"] = [
+                {
+                    "filename": os.path.basename(attachment.file.name),
+                    "url": attachment.file.url,
+                    "pk": attachment.pk,
+                }
+                for attachment in OrderAttachment.objects.filter(
+                    order=order.id, type="picture"
+                ).order_by("pk")[:50]
+            ]
+            return context
+        except Exception as e:
+            print("EXCEPT CONTEXT")
+            print(traceback.format_exc())
+
+        return None
+
 
     # Check la validité de form (order)
     def form_valid(self, form):
@@ -152,6 +160,7 @@ class EditOrder(UpdateView):
             return self.form_invalid(form)
 
     def form_invalid(self, form):
+        print("FORM INVALID")
         customer_form = NewCustomerForm(
             self.request.POST, instance=self.object.customer
         )
@@ -248,7 +257,6 @@ class Dashboard(ListView):
         context["count_invoice"] = count_invoice
         context["count_canceled"] = count_canceled
         context["count_urgent"] = count_urgent
-
 
         return context
 
@@ -462,6 +470,19 @@ def save_pictures(request):
         order_id = request.POST["orderId"]
 
         file.name = current_time + "_" + file.name
+        split = file.name.split('.')
+
+        if len(split) > 1:
+            extension = split[-1]
+            extension_rgx = re.sub('[^A-Za-z0-9]+', '', extension)
+            name = split[0:-1]
+            name_str = "".join(name)
+            name_rgx = re.sub('[^A-Za-z0-9]+', '', name_str)
+            concat = name_rgx + '.' + extension_rgx
+        else:
+            concat = re.sub('[^A-Za-z0-9]+', '', file.name)
+
+        file.name = concat
 
         # On crée l'objet OrderAttachment
         attachment = OrderAttachment()

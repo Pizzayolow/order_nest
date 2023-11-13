@@ -3,8 +3,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import WebappHome, CreateOrder, EditOrder, DeleteOrder, SearchOrder, Dashboard, \
-    DeleteProduct, EditProduct, AddProductsToOrder,DeletePicture, get_clients, product_order_list, save_canvas, DeleteCanvas, get_canvas, get_orders, LandingPage, save_pictures
-
+    DeleteProduct, EditProduct, AddProductsToOrder, DeletePicture, get_clients, product_order_list, save_canvas, DeleteCanvas, get_canvas, get_orders, LandingPage, save_pictures
 
 
 app_name = 'webapp'
@@ -45,5 +44,5 @@ urlpatterns = [
 
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#if settings.DEBUG:
+#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
