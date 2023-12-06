@@ -11,5 +11,5 @@ class AuthRequiredMiddleware:
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if not request.user.is_authenticated and request.path not in [reverse('webapp:login'), reverse('webapp:landing')]:
+        if not request.user.is_authenticated and request.path not in [reverse('webapp:login')]:
             return HttpResponseRedirect(reverse('webapp:login'))

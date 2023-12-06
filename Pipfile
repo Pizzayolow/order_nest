@@ -12,6 +12,7 @@ django-phonenumber-field = "*"
 phonenumbers = "*"
 django-browser-reload = "*"
 whitenoise = "*"
+tzdata = "*"
 
 [dev-packages]
 mypy = "*"

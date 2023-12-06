@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 200 200">
+	<!-- Diagonale du coin supérieur gauche au coin inférieur droit -->
+	<line x1="10" y1="10" x2="190" y2="190" stroke="red" stroke-width="20" />
+	<!-- Diagonale du coin supérieur droit au coin inférieur gauche -->
+	<line x1="190" y1="10" x2="10" y2="190" stroke="red" stroke-width="20" />
+  </svg>
+  

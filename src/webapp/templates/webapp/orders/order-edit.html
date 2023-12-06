@@ -135,10 +135,8 @@
 					</a>
 				</div>
 				<div class="btnok">
-					<button style="background-color: #0060EF; border-radius: 10px;" type="submit" class="w-32 text-lg div-ombre-button-edit py-2 px-4 mb-2 text-sm text-white
-						focus:outline-none
-					   focus:z-10 focus:ring-4 focus:ring-gray-200
-					   mb-5" value="Update">Enregistrer</button>
+					<button type="submit" class="blue-button div-ombre-button-edit py-2 px-6 mb-2 text-sm text-white text-gray-900
+					focus:outline-none rounded-xl focus:z-10 focus:ring-4 focus:ring-gray-200" value="Update">Enregistrer</button>
 				</div>
 			</div>
 			<hr>
@@ -157,8 +155,10 @@
 
 		<!-- Conteneur pour le bouton, aligné en bas à droite -->
 		<div class="flex justify-end mt-auto">
-			<button style="background-color: #0060EF; border-radius: 10px;"
-				hx-get="{% url 'webapp:order-add-products' pk=order_form.instance.id %}" hx-target="#dialog" class="w-32 text-sm div-ombre-button-edit py-2 px-4 mb-2 text-sm text-white
+			<button
+				hx-get="{% url 'webapp:order-add-products' pk=order_form.instance.id %}"
+				hx-target="#dialog"
+				class="blue-button div-ombre-button-edit rounded-xl w-32 text-sm div-ombre-button-edit py-2 px-4 mb-2 text-sm text-white
 					focus:outline-none
 				   focus:z-10 focus:ring-4 focus:ring-gray-200 mb-5">
 				Ajouter Produit
@@ -166,6 +166,8 @@
 		</div>
 		<hr>
 
+
+		
 
 
 		<!-- Liste des photos -->
@@ -193,8 +195,10 @@
 
 		<!-- Bouton pour ouvrir le modal Joindre photo -->
 		<div class="flex justify-end">
-			<button style="background-color: #0060EF; border-radius: 10px;" id="openModalPictureButton"
-			class="w-32 text-sm div-ombre-button-edit py-2 px-4 mb-4 text-sm text-white
+			<button
+			id="openModalPictureButton"
+			class="blue-button div-ombre-button-edit rounded-xl
+			w-32 text-sm div-ombre-button-edit py-2 px-4 mb-4 text-sm text-white
 			focus:outline-none
 		   focus:z-10 focus:ring-4 focus:ring-gray-200">
 				Joindre photo
@@ -228,9 +232,10 @@
 		</div>
 
 		<div class="flex justify-end">
-			<button id="bt_saveDrawing"
-			style="background-color: #0060EF; border-radius: 10px;"
-				class="w-32 text-sm div-ombre-button-edit py-2 px-4 mb-2 mt-2 text-sm text-white
+			<button
+			id="bt_saveDrawing"
+			class="blue-button div-ombre-button-edit rounded-xl
+			w-32 text-sm div-ombre-button-edit py-2 px-4 mb-2 mt-2 text-sm text-white
 				focus:outline-none
 			focus:z-10 focus:ring-4 focus:ring-gray-200">
 				Sauvegarder
@@ -274,7 +279,16 @@
 	<div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md"></div>
 	<!-- Contenu du modal -->
 	<div style="max-width: 800px; width: 90%;" class="bg-white p-6 rounded-lg mx-auto border-2 relative z-10">
-		<h2 class="text-2xl mb-4 underline">Joindre une photo</h2>
+		<!-- <h2 class="text-2xl mb-4 underline">Joindre une photo</h2> -->
+		<div class="titre flex justify-left text-3xl font-bold mb-10">
+
+			<h1 class="title">Joindre une photo</h1>
+
+		
+		</div>
+		<div class="error justify-end">
+			<span id="pictureError"></span>
+		</div>
 		<!-- Joindre une photo -->
 
 		<!-- Conteneur du bouton 'Parcourir' -->
@@ -290,16 +304,18 @@
 			<input class="hidden" type="file" accept="image/*" id="photoCaptureInput" capture="camera">
 			<!-- Label personnalisé servant de bouton -->
 			<label for="photoCaptureInput"
-			style="background-color: #0060EF; border-radius: 10px;"
 			type="submit"
-			class="cursor-pointer w-32 text-lg div-ombre-button-edit py-2 px-4 mb-2 text-sm text-white
+			class="blue-button div-ombre-button-edit rounded-xl
+			cursor-pointer w-32 text-lg div-ombre-button-edit py-2 px-4 mb-2 text-sm text-white
 			focus:outline-none
 			focus:z-10 focus:ring-4 focus:ring-gray-200
 			text-center
 			">
 				Parcourir
 			</label>
-		
+
+
+			
 
 		
 
